@@ -15,7 +15,6 @@ Accept: application/json
 POST {{rootURL}}/api/books
 Content-Type: application/json
 {
-  "id": 6,
   "title": "C# Advance",
   "author": "Crafter",
   "yearPublished": 2024

@@ -55,6 +55,7 @@ namespace REST_APIs.Controllers
             _context = context;
         }
 
+        // GET: api/Books
         [HttpGet]
         public async Task<ActionResult<List<Book>>> GetBooks()
         {
@@ -113,3 +114,26 @@ namespace REST_APIs.Controllers
 
     }
 }
+/*
+Task<T>
+Represents an asynchronous operation that returns a result of type T.
+Often used with async / await keywords.
+It represents an asynchronous operation that will complete in the future.
+
+public async Task<string> GetUserNameAsync()
+{
+    await Task.Delay(1000); // Simulate some async work
+    return "Mazhar";
+}
+
+🔹 Explanation
+Task<string> means this async method will eventually give back a string.
+
+Caller can await it:
+string name = await GetUserNameAsync();
+
+🔹 Difference
+Task → async method returns nothing (void-like).
+Task<T> → async method returns a value of type T.
+
+*/

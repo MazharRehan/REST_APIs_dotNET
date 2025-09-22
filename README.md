@@ -1,16 +1,15 @@
-# REST APIs .NET
+# REST APIs .NET - Books Management System
 
-A comprehensive collection of REST APIs built with .NET, demonstrating best practices in API development and modern C# features.
+A comprehensive Books Management REST API built with .NET Core, demonstrating CRUD operations with Entity Framework Core and modern C# features.
 
 ## Overview
 
-This repository contains REST API implementations using .NET, showcasing:
+This repository contains a REST API for managing books, showcasing:
 - RESTful API design principles
-- C# best practices
-- Standard HTTP methods (GET, POST, PUT, DELETE)
-- API documentation and versioning
-- Authentication and authorization
-- Error handling and logging
+- Entity Framework Core integration
+- Async/await patterns
+- HTTP status code best practices
+- Database operations with DbContext
 
 ## Table of Contents
 
@@ -21,11 +20,10 @@ This repository contains REST API implementations using .NET, showcasing:
 - [Features](#features)
 - [Development](#development)
 - [Testing](#testing)
-- [Deployment](#deployment)
 
 ## Requirements
 
-- [.NET SDK](https://dotnet.microsoft.com/download) (Latest LTS version)
+- [.NET SDK](https://dotnet.microsoft.com/download) 6.0 or higher
 - [Visual Studio](https://visualstudio.microsoft.com/) 2022+ or [VS Code](https://code.visualstudio.com/)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Express or higher)
 
@@ -33,15 +31,15 @@ This repository contains REST API implementations using .NET, showcasing:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/mazhar-invobyte/REST_APIs_dotNET.git
+   git clone https://github.com/MazharRehan/REST_APIs_dotNET.git
    cd REST_APIs_dotNET
    ```
 
-2. **Update database connection**
+2. **Update database connection string in appsettings.json**
    ```json
    {
      "ConnectionStrings": {
-       "DefaultConnection": "Server=localhost;Database=RestApiDb;Trusted_Connection=True;TrustServerCertificate=True;"
+       "DefaultConnection": "Server=localhost;Database=BooksDb;Trusted_Connection=True;TrustServerCertificate=True;"
      }
    }
    ```
@@ -56,150 +54,187 @@ This repository contains REST API implementations using .NET, showcasing:
    dotnet run
    ```
 
-5. **Access Swagger Documentation**
+5. **Access the API**
    ```
-   https://localhost:5001/swagger
+   http://localhost:5109
    ```
 
 ## API Documentation
 
-### Endpoints
+### Books API Endpoints
 
-#### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/refresh-token` - Refresh JWT token
-
-#### Resources
-- `GET /api/resources` - Get all resources
-- `GET /api/resources/{id}` - Get resource by ID
-- `POST /api/resources` - Create new resource
-- `PUT /api/resources/{id}` - Update resource
-- `DELETE /api/resources/{id}` - Delete resource
-
-### Authentication
-
-The API uses JWT Bearer token authentication:
-
-```bash
-Authorization: Bearer <your_token_here>
-```
-
-### Response Formats
-
-Success Response:
+#### Get All Books
+- **GET** `/api/books`
+- **Response**: List of all books
 ```json
-{
-  "success": true,
-  "data": {
+[
+  {
     "id": 1,
-    "name": "Resource Name",
-    "createdAt": "2025-09-01T12:34:14Z"
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "yearPublished": 1925
   }
+]
+```
+
+#### Get Book by ID
+- **GET** `/api/books/{id}`
+- **Response**: Single book object
+```json
+{
+  "id": 1,
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "yearPublished": 1925
 }
 ```
 
-Error Response:
+#### Create New Book
+- **POST** `/api/books`
+- **Request Body**:
 ```json
 {
-  "success": false,
-  "error": {
-    "code": "RESOURCE_NOT_FOUND",
-    "message": "The requested resource was not found"
-  }
+  "title": "C# Advanced",
+  "author": "Crafter",
+  "yearPublished": 2024
 }
 ```
+- **Response**: 201 Created with location header
+
+#### Update Book
+- **PUT** `/api/books/{id}`
+- **Request Body**:
+```json
+{
+  "id": 5,
+  "title": "Moby-Dick",
+  "author": "Herman Melville",
+  "yearPublished": 1851
+}
+```
+- **Response**: 204 No Content
+
+#### Partial Update Book (PATCH)
+- **PATCH** `/api/books/{id}`
+- **Request Body** (only fields to update):
+```json
+{
+  "title": "Updated Title",
+  "author": "New Author"
+}
+```
+- **Response**: 204 No Content
+
+#### Delete Book
+- **DELETE** `/api/books/{id}`
+- **Response**: 204 No Content
+
+### HTTP Status Codes
+
+- `200 OK` - Successful GET requests
+- `201 Created` - Successful POST requests
+- `204 No Content` - Successful PUT/PATCH/DELETE requests
+- `400 Bad Request` - Invalid request data
+- `404 Not Found` - Resource not found
 
 ## Project Structure
 
 ```
-src/
-├── REST_APIs_dotNET.API/          # API Project
-├── REST_APIs_dotNET.Core/         # Core Business Logic
-├── REST_APIs_dotNET.Data/         # Data Access Layer
-├── REST_APIs_dotNET.Services/     # Service Layer
-└── REST_APIs_dotNET.Tests/        # Unit & Integration Tests
+REST_APIs/
+├── Controllers/
+│   └── BooksController.cs          # Books API Controller
+├── Data/
+│   └── RESTAPIContext.cs          # Entity Framework DbContext
+├── Models/
+│   └── Book.cs                    # Book Entity Model
+├── Program.cs                     # Application startup
+└── appsettings.json              # Configuration
 ```
 
 ## Features
 
--  RESTful API endpoints
--  JWT authentication
--  Swagger documentation
--  Entity Framework Core
--  Repository pattern
--  Dependency injection
--  API versioning
--  Error handling middleware
--  Request/Response logging
--  Data validation
+- ✅ Full CRUD operations for Books
+- ✅ Entity Framework Core integration
+- ✅ Async/await pattern implementation
+- ✅ RESTful API design
+- ✅ Proper HTTP status codes
+- ✅ Database persistence
+- ✅ Input validation
+- ✅ Error handling
 
 ## Development
 
-### Adding New Endpoints
-
-1. Create Controller:
+### Book Model
 ```csharp
-[ApiController]
-[Route("api/[controller]")]
-public class ResourceController : ControllerBase
+public class Book
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        // Implementation
-    }
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int YearPublished { get; set; }
 }
 ```
 
-2. Add Service Layer:
-```csharp
-public interface IResourceService
-{
-    Task<IEnumerable<Resource>> GetAllAsync();
-}
-```
+### Adding New Features
 
-3. Implement Repository:
-```csharp
-public class ResourceRepository : IResourceRepository
-{
-    private readonly ApplicationDbContext _context;
-    
-    // Implementation
-}
-```
+1. **Add new properties to Book model**
+2. **Create and run migrations**
+   ```bash
+   dotnet ef migrations add AddNewProperty
+   dotnet ef database update
+   ```
+3. **Update controller methods as needed**
 
 ## Testing
 
-Run unit tests:
-```bash
-dotnet test
+You can test the API using the provided `.http` file:
+
+```http
+@rootURL = http://localhost:5109
+
+# Get all books
+GET {{rootURL}}/api/books
+
+# Get book by ID
+GET {{rootURL}}/api/books/1
+
+# Create new book
+POST {{rootURL}}/api/books
+Content-Type: application/json
+{
+  "title": "New Book",
+  "author": "Author Name",
+  "yearPublished": 2024
+}
+
+# Update book
+PUT {{rootURL}}/api/books/1
+Content-Type: application/json
+{
+  "id": 1,
+  "title": "Updated Title",
+  "author": "Updated Author",
+  "yearPublished": 2024
+}
+
+# Partial update
+PATCH {{rootURL}}/api/books/1
+Content-Type: application/json
+{
+  "title": "Partially Updated Title"
+}
+
+# Delete book
+DELETE {{rootURL}}/api/books/1
 ```
 
-Run specific test project:
-```bash
-dotnet test REST_APIs_dotNET.Tests
-```
+## Key Technologies
 
-## Deployment
-
-1. **Build the application**
-   ```bash
-   dotnet publish -c Release -o ./publish
-   ```
-
-2. **Configure environment variables**
-   ```bash
-   ASPNETCORE_ENVIRONMENT=Production
-   ConnectionStrings__DefaultConnection=<your_connection_string>
-   ```
-
-3. **Run the application**
-   ```bash
-   cd publish
-   dotnet REST_APIs_dotNET.API.dll
-   ```
+- **ASP.NET Core** - Web API framework
+- **Entity Framework Core** - ORM for database operations
+- **SQL Server** - Database
+- **C#** - Programming language
+- **RESTful Architecture** - API design pattern
 
 ## Contributing
 
@@ -211,10 +246,9 @@ dotnet test REST_APIs_dotNET.Tests
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
-**Last Updated**: 2025-09-01 12:34:14 UTC  
-**Author**: [mazhar-invobyte](https://github.com/mazhar-invobyte)  
-**Language**: C# (100%)
+**Author**: [MazharRehan](https://github.com/MazharRehan)  
+**Repository**: [REST_APIs_dotNET](https://github.com/MazharRehan/REST_APIs_dotNET)

@@ -137,7 +137,7 @@ namespace REST_APIs.Controllers
                 return NotFound();
 
             // Apply patch to the book entity
-            patchDoc.ApplyTo(book, ModelState);
+            patchDoc.ApplyTo(book, ModelState); // ModelState to capture validation errors
 
             // Check if the model state is valid after applying the patch
             if (!ModelState.IsValid)

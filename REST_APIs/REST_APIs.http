@@ -35,26 +35,13 @@ DELETE {{rootURL}}/api/books/4
 
 
 ###
-# PATCH request - Update only specific fields of book with ID 2
+# PATCH request - Update only the title
 PATCH {{rootURL}}/api/books/2
-Content-Type: application/json
-{
-  "title": "Updated Book Title",
-  "author": "Mazhar Rehan"
-}
-
-###
-# PATCH request - Update only the year published
-PATCH {{rootURL}}/api/books/1
-Content-Type: application/json
-{
-  "yearPublished": 2025
-}
-
-###
-# PATCH request - Update only the author
-PATCH {{rootURL}}/api/books/3
-Content-Type: application/json
-{
-  "author": "New Author Name"
-}
+Content-Type: application/json-patch+json
+[
+  {
+    "op": "replace",
+    "path": "/title",
+    "value": ".NET Essentials"
+  }
+]

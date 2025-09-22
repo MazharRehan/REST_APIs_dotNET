@@ -32,3 +32,16 @@ Content-Type: application/json
 
 ###
 DELETE {{rootURL}}/api/books/4
+
+
+###
+# PATCH request - Update only the title
+PATCH {{rootURL}}/api/books/2
+Content-Type: application/json-patch+json
+[
+  {
+    "op": "replace",
+    "path": "/title",
+    "value": ".NET Essentials"
+  }
+]

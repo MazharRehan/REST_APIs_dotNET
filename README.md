@@ -15,6 +15,7 @@ This repository contains a REST API for managing books, showcasing:
 ## Table of Contents
 
 - [Requirements](#requirements)
+- [Template Used](#template-used) 
 - [Getting Started](#getting-started)
 - [Dependencies](#dependencies)
 - [API Documentation](#api-documentation)
@@ -28,6 +29,12 @@ This repository contains a REST API for managing books, showcasing:
 - [.NET SDK](https://dotnet.microsoft.com/download) 9.0 or higher
 - [Visual Studio](https://visualstudio.microsoft.com/) 2022+ or [VS Code](https://code.visualstudio.com/)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Express or higher)
+
+## Template Used:  
+
+This project was created using the **ASP.NET Core Web API** project template in C#.  
+
+![ASP.NET Core Web API Template](pic1.png)
 
 ## Getting Started
 
